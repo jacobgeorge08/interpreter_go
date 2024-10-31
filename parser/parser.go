@@ -1,6 +1,5 @@
 package parser
 
-import "C"
 import (
 	"fmt"
 	"strconv"
