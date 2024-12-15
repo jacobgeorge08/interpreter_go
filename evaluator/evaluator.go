@@ -25,7 +25,7 @@ func Eval(node ast.Node) object.Object {
 	case *ast.Boolean:
 		return nativeBoolToBooleanObject(node.Value)
 	case *ast.BlockStatement:
-		return evalStatements(node.Statements)
+		return evalBlockStatement(node)
 	case *ast.IfExpression:
 		return evalIfExpression(node)
 	case *ast.ReturnStatement:
@@ -52,14 +52,15 @@ func evalProgram(program *ast.Program) object.Object {
 	return result
 }
 
-func evalStatements(stmts []ast.Statement) object.Object {
+func evalBlockStatement(block *ast.BlockStatement) object.Object {
 	var result object.Object
-	for _, statement := range stmts {
-		result = Eval(statement)
 
-		if returnValue, ok := result.(*object.ReturnValue); ok {
-			return returnValue.Value
-		}
+	for _, statement := range block.Statements {
+		result = Eval(statement)
+    
+    if result != nil && result.Type() == object.RETURN_VALUE_OBJ{
+            return result 
+        }
 	}
 	return result
 }
