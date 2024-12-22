@@ -8,12 +8,24 @@ const (
 	INTEGER_OBJ      = "INTEGER"
 	BOOLEAN_OBJ      = "BOOLEAN"
 	NULL_OBJ         = "NULL"
+	ERROR_OBJ        = "ERROR"
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
 )
 
 type Object interface {
 	Type() ObjectType
 	Inspect() string
+}
+
+type Error struct {
+	Message string
+}
+
+func (e *Error) Inspect() string {
+	return "ERROR: " + e.Message
+}
+func (e *Error) Type() ObjectType {
+    return ERROR_OBJ
 }
 
 type Integer struct {
@@ -23,6 +35,7 @@ type Integer struct {
 func (i *Integer) Inspect() string {
 	return fmt.Sprintf("%d", i.Value)
 }
+
 func (i *Integer) Type() ObjectType {
 	return INTEGER_OBJ
 }
@@ -34,6 +47,7 @@ type Boolean struct {
 func (b *Boolean) Inspect() string {
 	return fmt.Sprintf("%t", b.Value)
 }
+
 func (b *Boolean) Type() ObjectType {
 	return BOOLEAN_OBJ
 }
